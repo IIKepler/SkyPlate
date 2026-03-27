@@ -6,10 +6,10 @@ import { Upload, Plus, Trash2 } from 'lucide-react';
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [menu, setMenu] = useState([]);
-  const [newDish, setNewDish] = useState({ name: '', price: '', category: '', description: '' });
+  const [newDish, setNewDish] = useState({ name: '', price: '', category: '', type: 'Plato', description: '' });
 
   useEffect(() => {
-    const savedMenu = JSON.parse(localStorage.getItem('restaurant_menu') || '[]');
+    const savedMenu = JSON.parse(localStorage.getItem('skyplate_menu_v7') || '[]');
     setMenu(savedMenu);
   }, []);
 
@@ -36,11 +36,13 @@ export default function AdminDashboard() {
         const name = row.Nombre || row.name || `Plato ${index + 1}`;
         const price = row.Precio || row.price || 0;
         const category = row.Categoria || row.category || categorizeDish(name);
+        const type = row.Tipo || row.type || 'Plato';
         return {
           id: Date.now() + Math.random(),
           name,
           price: parseFloat(price),
           category,
+          type,
           description: row.Descripcion || row.description || '',
           image: row.Imagen || row.image || ''
         };
@@ -48,7 +50,7 @@ export default function AdminDashboard() {
 
       const updatedMenu = [...menu, ...newDishes];
       setMenu(updatedMenu);
-      localStorage.setItem('restaurant_menu', JSON.stringify(updatedMenu));
+      localStorage.setItem('skyplate_menu_v7', JSON.stringify(updatedMenu));
     };
     reader.readAsBinaryString(file);
   };
@@ -64,20 +66,21 @@ export default function AdminDashboard() {
       name: newDish.name,
       price: parseFloat(newDish.price) || 0,
       category: dishCat,
+      type: newDish.type || 'Plato',
       description: newDish.description || '',
       image: newDish.image || ''
     };
 
     const updatedMenu = [...menu, dish];
     setMenu(updatedMenu);
-    localStorage.setItem('restaurant_menu', JSON.stringify(updatedMenu));
-    setNewDish({ name: '', price: '', category: '', description: '' });
+    localStorage.setItem('skyplate_menu_v7', JSON.stringify(updatedMenu));
+    setNewDish({ name: '', price: '', category: '', type: 'Plato', description: '' });
   };
 
   const removeDish = (id) => {
     const updated = menu.filter(d => d.id !== id);
     setMenu(updated);
-    localStorage.setItem('restaurant_menu', JSON.stringify(updated));
+    localStorage.setItem('skyplate_menu_v7', JSON.stringify(updated));
   };
 
   return (
@@ -124,6 +127,14 @@ export default function AdminDashboard() {
               required
               style={{ padding: '0.75rem', borderRadius: '0.5rem', background: '#374151', color: 'white', border: '1px solid #4b5563' }}
             />
+            <select
+              value={newDish.type}
+              onChange={e => setNewDish({...newDish, type: e.target.value})}
+              style={{ padding: '0.75rem', borderRadius: '0.5rem', background: '#374151', color: 'white', border: '1px solid #4b5563' }}
+            >
+              <option value="Plato">Plato</option>
+              <option value="Bebida">Bebida</option>
+            </select>
             <button type="submit" className="btn btn-primary">Agregar Plato</button>
           </form>
         </div>
@@ -140,8 +151,11 @@ export default function AdminDashboard() {
                   <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: dish.category === 'Frío' ? '#3b82f6' : '#ef4444', borderRadius: '1rem', marginLeft: '0.5rem' }}>
                     {dish.category}
                   </span>
+                  <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: '#4b5563', borderRadius: '1rem', marginLeft: '0.5rem' }}>
+                    {dish.type || 'Plato'}
+                  </span>
                 </h3>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>${dish.price.toFixed(2)}</p>
+                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>${dish.price.toLocaleString('es-CL')}</p>
               </div>
               <button 
                 onClick={() => removeDish(dish.id)}

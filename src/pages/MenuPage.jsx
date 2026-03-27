@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, LogOut, Sun, CloudRain } from 'lucide-react';
+import { ShoppingCart, LogOut, Sun, CloudRain, Trash2, Utensils, CupSoda } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const INITIAL_MENU = [
-  // 8 Platos Fríos (Italian)
-  { id: 1, name: "Carpaccio de Ternera", category: "Frío", price: 18.5, description: "Finas láminas de ternera con rúcula, alcaparras y lluvia de parmesano.", image: "https://images.unsplash.com/photo-1541592654513-f4270ebc0903?auto=format&fit=crop&q=80&w=600" },
-  { id: 2, name: "Ensalada Caprese", category: "Frío", price: 14.0, description: "Mozzarella di bufala, tomates cherry asados y pesto genovés de albahaca.", image: "https://images.unsplash.com/photo-1529312266912-b33cfce2eefd?auto=format&fit=crop&q=80&w=600" },
-  { id: 3, name: "Tiramisú Tradizionale", category: "Frío", price: 9.5, description: "Bizcochos savoiardi bañados en café expreso con crema montada de mascarpone.", image: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&q=80&w=600" },
-  { id: 4, name: "Burrata Cremosa", category: "Frío", price: 16.0, description: "Burrata fresca de corazón líquido, prosciutto italiano y reducción de balsámico.", image: "https://images.unsplash.com/photo-1628108922245-5df8524d7768?auto=format&fit=crop&q=80&w=600" },
-  { id: 5, name: "Bruschetta al Pomodoro", category: "Frío", price: 11.0, description: "Rebajas de pan campesino con ajo frotado, tomate fresco y aceite de oliva.", image: "https://images.unsplash.com/photo-1506280754576-f6fa8a873ce4?auto=format&fit=crop&q=80&w=600" },
-  { id: 6, name: "Panna Cotta de Frutos Rojos", category: "Frío", price: 8.5, description: "Postre clásico piamontés de crema avainillada con un exquisito coulis.", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=600" },
-  { id: 7, name: "Vitello Tonnato", category: "Frío", price: 21.0, description: "Cortes finos de ternera bañados en una suave salsa de atún, anchoas y alcaparras.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" },
-  { id: 8, name: "Ensalada Panzanella", category: "Frío", price: 13.5, description: "Ensalada toscana rústica con pan crujiente, tomate reliquia y vinagreta.", image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=600" },
+  // 8 Platos Fríos (Peruanos)
+  { id: 1, name: "Pulpo al Olivo", category: "Frío", type: "Plato", price: 14500, description: "Pulpo macerado en limón de pica y especias con suave salsa al olivo.", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&q=80&w=600" },
+  { id: 2, name: "Causa Camarón y Jaiba", category: "Frío", type: "Plato", price: 12900, description: "Masa de papa amarilla y ají rellena de camarones frescos y jugosa jaiba.", image: "https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&q=80&w=600" },
+  { id: 3, name: "Causa de Pulpo al Olivo", category: "Frío", type: "Plato", price: 13500, description: "Masa de papa y ají tradicional rellena de tierno pulpo en salsa al olivo.", image: "https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=600" },
+  { id: 4, name: "Papas a la Huancaína", category: "Frío", type: "Plato", price: 8900, description: "Papas cocidas bañadas en cremosa salsa de ají, galleta, maní y queso andino.", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=600" },
+  { id: 5, name: "Salpicón de Pollo", category: "Frío", type: "Plato", price: 9500, description: "Ensalada fresca de lechuga, tomate, zanahoria, papas, pechuga de pollo y vinagreta.", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600" },
+  { id: 6, name: "Ceviche de Pescado", category: "Frío", type: "Plato", price: 15500, description: "Cubos de pescado fresco marinados en jugo de limón de pica, cilantro y especias.", image: "https://cdn7.kiwilimon.com/recetaimagen/41515/640x640/56738.jpg.jpg" },
+  { id: 7, name: "Tiradito de Pescado", category: "Frío", type: "Plato", price: 16500, description: "Finos cortes de pescado marinados en limón de pica con un toque de crema de ají amarillo.", image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=600" },
+  { id: 8, name: "Leche de Tigre con Pisco", category: "Frío", type: "Plato", price: 11000, description: "Concentrado cítrico de ceviche peruano realzado con un elegante toque de pisco.", image: "https://blog.amigofoods.com/wp-content/uploads/2020/08/leche-de-tigre-peruvian-drink-999x1024.jpg" },
 
-  // 8 Platos Calientes (Italian)
-  { id: 9, name: "Lasaña Boloñesa", category: "Caliente", price: 19.5, description: "Lasaña tradicional al horno con bechamel casera, ragú de carne y gratinado de queso.", image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&q=80&w=600" },
-  { id: 10, name: "Pizza Margherita Napoli", category: "Caliente", price: 15.0, description: "Masa madre a la piedra con salsa San Marzano, fior di latte y hojas de albahaca.", image: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&q=80&w=600" },
-  { id: 11, name: "Risotto ai Funghi", category: "Caliente", price: 22.0, description: "Arroz arborio cremoso con setas porcini silvestres al vino blanco y trufa.", image: "https://images.unsplash.com/photo-1633337474564-1d9aba52f442?auto=format&fit=crop&q=80&w=600" },
-  { id: 12, name: "Sopa Minestrone", category: "Caliente", price: 12.0, description: "Sopa rústica reconfortante de vegetales de temporada, alubias tiernas y pasta.", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=600" },
-  { id: 13, name: "Spaghetti Carbonara", category: "Caliente", price: 17.5, description: "Receta romana original: guanciale crujiente, yemas, pecorino romano y pimienta.", image: "https://images.unsplash.com/photo-1612874742237-65262215c0a9?auto=format&fit=crop&q=80&w=600" },
-  { id: 14, name: "Ossobuco alla Milanese", category: "Caliente", price: 28.0, description: "Estofado tierno de ternera servido con reducción de sus jugos sobre polenta.", image: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&q=80&w=600" },
-  { id: 15, name: "Pizza Quattro Formaggi", category: "Caliente", price: 18.0, description: "Exquisita masa crujiente con gorgonzola, mozzarella, parmesano y ricotta fresca.", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600" },
-  { id: 16, name: "Raviolis de Espinaca", category: "Caliente", price: 18.5, description: "Pasta fresca artesanal rellena de espinaca y ricotta, bañada en mantequilla y salvia.", image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&q=80&w=600" }
+  // 8 Platos Calientes (Peruanos)
+  { id: 9, name: "Anticucho de Corazón", category: "Caliente", type: "Plato", price: 11500, description: "Trozos de corazón de vacuno a la plancha macerados en salsa panca especial.", image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=600" },
+  { id: 10, name: "Chicharrón de Pescado", category: "Caliente", type: "Plato", price: 14500, description: "Trozos de pescado blanco apanados y fritos, servidos con crujientes papas doradas.", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&q=80&w=600" },
+  { id: 11, name: "Machas a la Parmesana", category: "Caliente", type: "Plato", price: 16900, description: "Machas frescas horneadas con vino blanco, toques de mantequilla y queso parmesano gratinado.", image: "https://www.recetaslider.cl/wp-content/uploads/2021/11/R8A6477cambio6-scaled.jpg" },
+  { id: 12, name: "Lomo Saltado", category: "Caliente", type: "Plato", price: 17500, description: "Jugoso filete de vacuno salteado al wok con cebolla, tomate, ají, servido con arroz y papas.", image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=600" },
+  { id: 13, name: "Ají de Gallina", category: "Caliente", type: "Plato", price: 13500, description: "Pechuga de pollo deshilachada sumergida en una crema de nueces, pan y ají amarillo.", image: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&q=80&w=600" },
+  { id: 14, name: "Pescado a lo Macho", category: "Caliente", type: "Plato", price: 18500, description: "Filete de pescado bañado en una contundente salsa de mariscos al vino blanco y ají panca.", image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=600" },
+  { id: 15, name: "Arroz con Mariscos", category: "Caliente", type: "Plato", price: 16500, description: "Sabrosa mixtura de mariscos salteados sobre una base de arroz sazonado con choclo guisado.", image: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&q=80&w=600" },
+  { id: 16, name: "Chupe de Camarones", category: "Caliente", type: "Plato", price: 15900, description: "Sopa espesa y reconfortante de camarones, papa, choclo, queso fresco, leche y huevo escalfado.", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=600" },
+
+  // Bebidas (Frías)
+  { id: 17, name: "Pisco Sour Clásico", category: "Frío", type: "Bebida", price: 6500, description: "Clásico peruano a base de pisco quebranta, limón de pica, jarabe de goma y clara.", image: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600" },
+  { id: 18, name: "Chicha Morada Helada", category: "Frío", type: "Bebida", price: 3500, description: "Refrescante chicha de maíz morado hervida con piña, canela, clavo y limón.", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600" },
+  { id: 19, name: "Limonada Frozen", category: "Frío", type: "Bebida", price: 3200, description: "Limonada sumamente refrescante batida con abundante hielo frappé.", image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600" },
+  { id: 20, name: "Inca Kola Helada", category: "Frío", type: "Bebida", price: 2500, description: "La icónica bebida gaseosa de sabor nacional, bien helada.", image: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=600" },
+
+  // Bebidas (Calientes)
+  { id: 21, name: "Té de Muña", category: "Caliente", type: "Bebida", price: 2500, description: "Infusión andina digestiva y reconfortante de hojas de muña natural.", image: "https://www.herbazest.com/imgs/c/d/0/691353/infusion-refrescante-de-muna-index.jpg" },
+  { id: 22, name: "Emoliente Caliente", category: "Caliente", type: "Bebida", price: 3000, description: "Bebida tradicional de hierbas medicinales, linaza y un toque de limón caliente.", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600" },
+  { id: 23, name: "Café Pasado", category: "Caliente", type: "Bebida", price: 2900, description: "Intenso café orgánico peruano, pasado gota a gota.", image: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600" },
+  { id: 24, name: "Infusión de Hierbaluisa", category: "Caliente", type: "Bebida", price: 2500, description: "Clásica infusión suave y relajante de hierbaluisa recién recolectada.", image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=600" }
 ];
 
 export default function MenuPage() {
@@ -34,16 +46,13 @@ export default function MenuPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load Menu
-    let saved = JSON.parse(localStorage.getItem('restaurant_menu') || 'null');
-    // Forzamos la carga del menú italiano si hay menos de 10 platos guardados
-    if (!saved || saved.length < 10) {
-      localStorage.setItem('restaurant_menu', JSON.stringify(INITIAL_MENU));
+    let saved = JSON.parse(localStorage.getItem('skyplate_menu_v7') || 'null');
+    if (!saved || saved.length < 24) {
+      localStorage.setItem('skyplate_menu_v7', JSON.stringify(INITIAL_MENU));
       saved = INITIAL_MENU;
     }
     setMenu(saved);
 
-    // Weather API (Open-Meteo) con Geolocalización Real
     const fetchWeather = (lat, lon) => {
       const apiUrl = import.meta.env.VITE_WEATHER_API_URL || 'https://api.open-meteo.com/v1/forecast';
       axios.get(`${apiUrl}?latitude=${lat}&longitude=${lon}&current_weather=true`)
@@ -89,13 +98,52 @@ export default function MenuPage() {
     });
   };
 
-  const currentDishes = menu.filter(d => d.category === category);
+  const removeFromCart = (id) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    const phone = import.meta.env.VITE_WHATSAPP_NUMBER || '+569757152957';
+    let text = `¡Hola! Me gustaría hacer el siguiente pedido:\n\n`;
+    cart.forEach(item => {
+      text += `- ${item.quantity}x ${item.name} ($${item.price.toLocaleString('es-CL')} c/u) = $${(item.quantity * item.price).toLocaleString('es-CL')}\n`;
+    });
+    text += `\n*TOTAL: $${cartTotal.toLocaleString('es-CL')}*`;
+
+    // Eliminamos caracteres no numericos (excepto +) del numero telefonico
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+    const encodedText = encodeURIComponent(text);
+
+    window.open(`https://wa.me/${cleanPhone}?text=${encodedText}`, '_blank');
+  };
+
+  // Filtrando los platos y bebidas segun tipo y categoria
+  const foodItems = menu.filter(d => d.category === category && (d.type === 'Plato' || !d.type));
+  const drinkItems = menu.filter(d => d.category === category && d.type === 'Bebida');
 
   const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const scrollToSec = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', transition: 'all 0.5s', position: 'relative' }}>
+
+      {/* Floating Quick Navigation */}
+      <div style={{ position: 'fixed', right: '2rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: '1rem', zIndex: 40 }}>
+        <button onClick={() => scrollToSec('seccion-platos')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '1rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.4)', color: 'white', fontWeight: 'bold', cursor: 'pointer', transition: '0.3s', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}>
+          <Utensils size={28} style={{ marginBottom: '0.3rem' }} />
+          <span style={{ fontSize: '0.75rem', textAlign: 'center' }}>Ver Platos</span>
+        </button>
+        <button onClick={() => scrollToSec('seccion-bebidas')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '1rem', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.4)', color: 'white', fontWeight: 'bold', cursor: 'pointer', transition: '0.3s', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}>
+          <CupSoda size={28} style={{ marginBottom: '0.3rem' }} />
+          <span style={{ fontSize: '0.75rem', textAlign: 'center' }}>Ver Bebidas</span>
+        </button>
+      </div>
+
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', padding: '1rem', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.2)' }}>
         <div>
           <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>SkyPlate</h1>
@@ -130,31 +178,63 @@ export default function MenuPage() {
       </header>
 
       <main>
-        <h2 style={{ fontSize: '2rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>
-          Nuestros Platos {category === 'Frío' ? '❄️' : '🔥'}
-        </h2>
+        {/* Sección Platos */}
+        <section id="seccion-platos" style={{ marginBottom: '4rem', scrollMarginTop: '2rem' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)', paddingBottom: '0.5rem', borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
+            Nuestros Platos {category === 'Frío' ? '❄️' : '🔥'}
+          </h2>
 
-        {currentDishes.length === 0 ? (
-          <p style={{ opacity: 0.8, fontSize: '1.2rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>No hay platos disponibles en esta categoría.</p>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '2rem' }}>
-            {currentDishes.map(dish => (
-              <div key={dish.id} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '1rem', transition: 'transform 0.2s', cursor: 'pointer', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 16px rgba(0,0,0,0.15)' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                {dish.image && (
-                  <img src={dish.image} alt={dish.name} style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
-                )}
-                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.name}</h3>
-                  {dish.description && <p style={{ fontSize: '0.9rem', opacity: 0.85, marginBottom: '1.5rem', flexGrow: 1, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.description}</p>}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>${dish.price.toFixed(2)}</span>
-                    <button className="btn btn-primary" onClick={() => addToCart(dish)} style={{ padding: '0.5rem 1.25rem', borderRadius: '2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }}>Agregar</button>
+          {foodItems.length === 0 ? (
+            <p style={{ opacity: 0.8, fontSize: '1.2rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>No hay platos disponibles en esta categoría.</p>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '2rem' }}>
+              {foodItems.map(dish => (
+                <div key={dish.id} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '1rem', transition: 'transform 0.2s', cursor: 'pointer', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 16px rgba(0,0,0,0.15)' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                  {dish.image && (
+                    <img src={dish.image} alt={dish.name} style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
+                  )}
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.name}</h3>
+                    {dish.description && <p style={{ fontSize: '0.9rem', opacity: 0.85, marginBottom: '1.5rem', flexGrow: 1, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.description}</p>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                      <span style={{ fontSize: '1.25rem', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>${dish.price.toLocaleString('es-CL')}</span>
+                      <button className="btn btn-primary" onClick={() => addToCart(dish)} style={{ padding: '0.5rem 1.25rem', borderRadius: '2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }}>Agregar</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Sección Bebidas */}
+        <section id="seccion-bebidas" style={{ scrollMarginTop: '2rem' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)', paddingBottom: '0.5rem', borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
+            Nuestras Bebidas {category === 'Frío' ? '❄️' : '🔥'}
+          </h2>
+
+          {drinkItems.length === 0 ? (
+            <p style={{ opacity: 0.8, fontSize: '1.2rem', textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>No hay bebidas disponibles en esta categoría.</p>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '2rem' }}>
+              {drinkItems.map(dish => (
+                <div key={dish.id} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '1rem', transition: 'transform 0.2s', cursor: 'pointer', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 16px rgba(0,0,0,0.15)' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                  {dish.image && (
+                    <img src={dish.image} alt={dish.name} style={{ width: '100%', height: '180px', objectFit: 'cover', objectPosition: 'center' }} />
+                  )}
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.name}</h3>
+                    {dish.description && <p style={{ fontSize: '0.9rem', opacity: 0.85, marginBottom: '1.5rem', flexGrow: 1, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{dish.description}</p>}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+                      <span style={{ fontSize: '1.25rem', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>${dish.price.toLocaleString('es-CL')}</span>
+                      <button className="btn btn-primary" onClick={() => addToCart(dish)} style={{ padding: '0.5rem 1.25rem', borderRadius: '2rem', boxShadow: '0 4px 6px rgba(0,0,0,0.2)' }}>Agregar</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </main>
 
       {/* Footer */}
@@ -184,19 +264,24 @@ export default function MenuPage() {
                   <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
                     <div>
                       <h4 style={{ fontWeight: 'bold' }}>{item.name}</h4>
-                      <p style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{item.quantity} x ${item.price.toFixed(2)}</p>
+                      <p style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{item.quantity} x ${item.price.toLocaleString('es-CL')}</p>
                     </div>
-                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>${(item.quantity * item.price).toFixed(2)}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>${(item.quantity * item.price).toLocaleString('es-CL')}</span>
+                      <button onClick={() => removeFromCart(item.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Eliminar plato">
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
                   <span>Total:</span>
-                  <span>${cartTotal.toFixed(2)}</span>
+                  <span>${cartTotal.toLocaleString('es-CL')}</span>
                 </div>
-                <button className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '0.5rem', fontSize: '1.1rem', background: '#2563eb' }}>
-                  Finalizar Compra
+                <button onClick={handleCheckout} className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '0.5rem', fontSize: '1.1rem', background: '#25eb5f', color: '#ffffff', textShadow: '1px 1px 2px rgba(0,0,0,0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+                  Finalizar Compra por WhatsApp
                 </button>
               </div>
             </>
