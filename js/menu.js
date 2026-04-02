@@ -171,7 +171,6 @@ function removeFromCart(id) {
   updateCartUI();
 }
 
-<<<<<<< HEAD
 function changeQuantity(id, delta) {
   const item = cart.find(i => i.id == id);
   if (!item) return;
@@ -180,45 +179,6 @@ function changeQuantity(id, delta) {
     cart = cart.filter(i => i.id != id);
   }
   updateCartUI();
-=======
-let toastTimeout = null;
-
-function showToast(message, element) {
-  const toastEl = document.getElementById('toast-notification');
-  if (!toastEl) return;
-  
-  // Limpiar timeout anterior si existe
-  if (toastTimeout) clearTimeout(toastTimeout);
-  
-  // Remover clases anteriores
-  toastEl.classList.remove('hide');
-  
-  // Establecer contenido
-  toastEl.innerHTML = `<i class="ph ph-check-circle"></i>${message}`;
-  
-  // Aplicar tema actual
-  const theme = document.body.className === 'theme-cold' ? 'theme-cold' : 'theme-hot';
-  toastEl.className = `toast ${theme}`;
-  
-  // Posición fija: superior derecha
-  toastEl.style.top = '1.5rem';
-  toastEl.style.right = '1.5rem';
-  toastEl.style.left = 'auto';
-  toastEl.style.bottom = 'auto';
-  
-  // Mostrar
-  toastEl.classList.add('show');
-  
-  // Ocultar después de 3 segundos
-  toastTimeout = setTimeout(() => {
-    toastEl.classList.remove('show');
-    toastEl.classList.add('hide');
-    
-    setTimeout(() => {
-      toastEl.classList.remove('hide');
-    }, 400);
-  }, 3000);
->>>>>>> Feature/Calvarez/2026-04-02-Fix-N°3-Agregar_toast
 }
 
 function toggleCart(show) {

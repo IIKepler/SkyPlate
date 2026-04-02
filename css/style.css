@@ -614,7 +614,6 @@ body.theme-hot::before {
 .badge-caliente { background: #ef4444; }
 .badge-tipo { background: #4b5563; }
 
-<<<<<<< HEAD
 /* Toast Notification */
 @keyframes fadeInToast {
   from {
@@ -693,14 +692,3 @@ body.theme-hot::before {
     font-size: 0.9rem;
   }
 }
-=======
-.theme-hot .float-btn {
-  background: rgba(0, 0, 0, 0.25); /* contraste justo */
-  border: 1px solid rgb(255, 255, 255); /* línea blanca visible */
-}
-
-.theme-cold .footer p:last-child {
-  color: #ffffff;
-  opacity: 1;
-}
->>>>>>> Feature/Aalquinta/2026-04-01-fix-1-fix-2-footer-y-boton-opcion-platos-y-bebidas
