@@ -221,6 +221,19 @@ body.theme-hot::before {
   text-align: center;
 }
 
+/* sombra suave para botones */
+.float-btn {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.float-btn i {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.float-btn span {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
 /* Sections */
 .menu-section {
   margin-bottom: 4rem;
@@ -352,27 +365,72 @@ body.theme-hot::before {
 
 .cart-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.75rem;
   background: rgba(255, 255, 255, 0.1);
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.cart-item h4 {
+
+.cart-item-info h4 {
   font-weight: bold;
+  margin-bottom: 0.15rem;
 }
 
-.cart-item p {
-  font-size: 0.85rem;
-  color: #cbd5e1;
+.cart-item-unit-price {
+  font-size: 0.82rem;
+  color: #94a3b8;
 }
 
 .cart-item-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+/* Quantity stepper */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.qty-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.qty-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.qty-value {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0 0.25rem;
+}
+
+.cart-item-subtotal {
+  font-weight: bold;
+  font-size: 1rem;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .btn-remove {
@@ -429,7 +487,8 @@ body.theme-hot::before {
 }
 
 .theme-cold .footer p {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7),
+  0px 0px 6px rgb(255, 255, 255);
 }
 
 /* Login Page Styles */
@@ -554,3 +613,94 @@ body.theme-hot::before {
 .badge-frio { background: #3b82f6; }
 .badge-caliente { background: #ef4444; }
 .badge-tipo { background: #4b5563; }
+
+<<<<<<< HEAD
+/* Toast Notification */
+@keyframes fadeInToast {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutToast {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #4CAF50;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  z-index: 9999;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+}
+
+.toast i {
+  font-size: 1.25rem;
+}
+
+.toast.show {
+  display: flex;
+  animation: fadeInToast 0.4s ease-out forwards;
+}
+
+.toast.hide {
+  animation: fadeOutToast 0.4s ease-out forwards;
+}
+
+/* Temas para Toast */
+.toast.theme-cold {
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+.toast.theme-hot {
+  background: #ef4444;
+  border: 1px solid #ef4444;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+}
+
+@media (max-width: 640px) {
+  .toast {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+=======
+.theme-hot .float-btn {
+  background: rgba(0, 0, 0, 0.25); /* contraste justo */
+  border: 1px solid rgb(255, 255, 255); /* línea blanca visible */
+}
+
+.theme-cold .footer p:last-child {
+  color: #ffffff;
+  opacity: 1;
+}
+>>>>>>> Feature/Aalquinta/2026-04-01-fix-1-fix-2-footer-y-boton-opcion-platos-y-bebidas

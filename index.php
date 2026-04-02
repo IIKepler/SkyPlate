@@ -28,6 +28,9 @@ $whatsapp_number = '+569757152957';
     };
   </script>
 
+  <!-- Toast Notification -->
+  <div id="toast-notification" class="toast" role="status" aria-live="polite"></div>
+
   <!-- Floating Quick Navigation -->
   <div class="floating-nav">
     <a href="#seccion-platos" class="float-btn">
