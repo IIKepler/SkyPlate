@@ -692,3 +692,8 @@ body.theme-hot::before {
     font-size: 0.9rem;
   }
 }
+
+.theme-hot .float-btn {
+  background: rgba(0, 0, 0, 0.25); /* contraste justo */
+  border: 1px solid rgb(255, 255, 255); /* línea blanca visible */
+}
