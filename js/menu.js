@@ -170,6 +170,16 @@ function removeFromCart(id) {
   updateCartUI();
 }
 
+function changeQuantity(id, delta) {
+  const item = cart.find(i => i.id == id);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity <= 0) {
+    cart = cart.filter(i => i.id != id);
+  }
+  updateCartUI();
+}
+
 function toggleCart(show) {
   if (show) {
     cartSidebar.classList.add('open');
@@ -198,17 +208,24 @@ function updateCartUI() {
       const el = document.createElement('div');
       el.className = 'cart-item';
       el.innerHTML = `
-        <div>
+        <div class="cart-item-info">
           <h4>${item.name}</h4>
-          <p>${item.quantity} x $${parseInt(item.price).toLocaleString('es-CL')}</p>
+          <p class="cart-item-unit-price">$${parseInt(item.price).toLocaleString('es-CL')} c/u</p>
         </div>
         <div class="cart-item-actions">
-          <span style="font-weight: bold; font-size: 1.1rem;">$${(item.quantity * item.price).toLocaleString('es-CL')}</span>
+          <div class="qty-controls">
+            <button class="qty-btn btn-decrease" data-id="${item.id}" title="Restar unidad">−</button>
+            <span class="qty-value">${item.quantity}</span>
+            <button class="qty-btn btn-increase" data-id="${item.id}" title="Sumar unidad">+</button>
+          </div>
+          <span class="cart-item-subtotal">$${(item.quantity * item.price).toLocaleString('es-CL')}</span>
           <button class="btn-remove" data-id="${item.id}" title="Eliminar plato">
             <i class="ph ph-trash" style="font-size: 1.25rem;"></i>
           </button>
         </div>
       `;
+      el.querySelector('.btn-decrease').addEventListener('click', () => changeQuantity(item.id, -1));
+      el.querySelector('.btn-increase').addEventListener('click', () => changeQuantity(item.id, +1));
       el.querySelector('.btn-remove').addEventListener('click', () => removeFromCart(item.id));
       cartItemsContainer.appendChild(el);
     });
