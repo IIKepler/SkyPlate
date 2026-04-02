@@ -166,12 +166,6 @@ function addToCart(dish, btnElement) {
   showToast('Agregado al carrito', btnElement);
 }
 
-function removeFromCart(id) {
-  cart = cart.filter(item => item.id != id);
-  updateCartUI();
-}
-
-<<<<<<< HEAD
 function changeQuantity(id, delta) {
   const item = cart.find(i => i.id == id);
   if (!item) return;
@@ -180,7 +174,8 @@ function changeQuantity(id, delta) {
     cart = cart.filter(i => i.id != id);
   }
   updateCartUI();
-=======
+}
+
 let toastTimeout = null;
 
 function showToast(message, element) {
@@ -218,7 +213,11 @@ function showToast(message, element) {
       toastEl.classList.remove('hide');
     }, 400);
   }, 3000);
->>>>>>> Feature/Calvarez/2026-04-02-Fix-N°3-Agregar_toast
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id != id);
+  updateCartUI();
 }
 
 function toggleCart(show) {
