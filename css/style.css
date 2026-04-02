@@ -221,6 +221,19 @@ body.theme-hot::before {
   text-align: center;
 }
 
+/* sombra suave para botones */
+.float-btn {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.float-btn i {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.float-btn span {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.10);
+}
+
 /* Sections */
 .menu-section {
   margin-bottom: 4rem;
@@ -474,7 +487,8 @@ body.theme-hot::before {
 }
 
 .theme-cold .footer p {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7),
+  0px 0px 6px rgb(255, 255, 255);
 }
 
 /* Login Page Styles */
@@ -600,6 +614,7 @@ body.theme-hot::before {
 .badge-caliente { background: #ef4444; }
 .badge-tipo { background: #4b5563; }
 
+<<<<<<< HEAD
 /* Toast Notification */
 @keyframes fadeInToast {
   from {
@@ -678,3 +693,14 @@ body.theme-hot::before {
     font-size: 0.9rem;
   }
 }
+=======
+.theme-hot .float-btn {
+  background: rgba(0, 0, 0, 0.25); /* contraste justo */
+  border: 1px solid rgb(255, 255, 255); /* línea blanca visible */
+}
+
+.theme-cold .footer p:last-child {
+  color: #ffffff;
+  opacity: 1;
+}
+>>>>>>> Feature/Aalquinta/2026-04-01-fix-1-fix-2-footer-y-boton-opcion-platos-y-bebidas
