@@ -599,3 +599,82 @@ body.theme-hot::before {
 .badge-frio { background: #3b82f6; }
 .badge-caliente { background: #ef4444; }
 .badge-tipo { background: #4b5563; }
+
+/* Toast Notification */
+@keyframes fadeInToast {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutToast {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #4CAF50;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  z-index: 9999;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+}
+
+.toast i {
+  font-size: 1.25rem;
+}
+
+.toast.show {
+  display: flex;
+  animation: fadeInToast 0.4s ease-out forwards;
+}
+
+.toast.hide {
+  animation: fadeOutToast 0.4s ease-out forwards;
+}
+
+/* Temas para Toast */
+.toast.theme-cold {
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+.toast.theme-hot {
+  background: #ef4444;
+  border: 1px solid #ef4444;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+}
+
+@media (max-width: 640px) {
+  .toast {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
