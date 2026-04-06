@@ -9,6 +9,7 @@ const dishTypeEl = document.getElementById('dish-type');
 const dishDescEl = document.getElementById('dish-desc'); // opcional
 const menuListContainer = document.getElementById('menu-list');
 const menuCountEl = document.getElementById('menu-count');
+const searchInputEl = document.getElementById('search-input');
 
 function initAdmin() {
   const saved = localStorage.getItem('skyplate_menu_v7');
@@ -23,6 +24,7 @@ function initAdmin() {
   // Events
   if (fileInput) fileInput.addEventListener('change', handleFileUpload);
   if (formManual) formManual.addEventListener('submit', handleManualSubmit);
+  if (searchInputEl) searchInputEl.addEventListener('input', renderAdminMenu);
 }
 
 function categorizeDish(name) {
@@ -112,15 +114,22 @@ function saveMenu() {
 }
 
 function renderAdminMenu() {
-  menuCountEl.innerText = menuData.length;
+  const query = searchInputEl && searchInputEl.value ? searchInputEl.value.toLowerCase() : '';
+  const filteredData = menuData.filter(dish => dish.name.toLowerCase().includes(query));
+
+  menuCountEl.innerText = filteredData.length;
   menuListContainer.innerHTML = '';
 
-  if (menuData.length === 0) {
-    menuListContainer.innerHTML = '<p style="color: #9ca3af;">No hay platos en el menú.</p>';
+  if (filteredData.length === 0) {
+    if (menuData.length === 0) {
+      menuListContainer.innerHTML = '<p style="color: #9ca3af;">No hay platos en el menú.</p>';
+    } else {
+      menuListContainer.innerHTML = '<p style="color: #9ca3af;">No se encontraron platos que coincidan con la búsqueda.</p>';
+    }
     return;
   }
 
-  menuData.forEach(dish => {
+  filteredData.forEach(dish => {
     const div = document.createElement('div');
     div.className = 'admin-list-item';
     

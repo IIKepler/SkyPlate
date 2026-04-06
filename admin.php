@@ -74,7 +74,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
     <!-- Lista de Platos Actuales -->
     <div class="admin-list">
-      <h2 style="margin-bottom: 1rem;">Menú Actual (<span id="menu-count">0</span> platos)</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+        <h2 style="margin: 0;">Menú Actual (<span id="menu-count">0</span> platos)</h2>
+        <input type="text" id="search-input" placeholder="Buscar por nombre..." style="padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 6px; width: 100%; max-width: 300px; font-family: inherit;">
+      </div>
       <div id="menu-list" style="display: flex; flex-direction: column; gap: 1rem;">
         <!-- Elementos del menu dinámicos desde admin.js -->
         <p style="color: #9ca3af;">Cargando menú...</p>
