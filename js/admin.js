@@ -11,6 +11,16 @@ const menuListContainer = document.getElementById('menu-list');
 const menuCountEl = document.getElementById('menu-count');
 const searchInputEl = document.getElementById('search-input');
 
+// Edit Modal Elements
+const editModal = document.getElementById('edit-modal');
+const formEdit = document.getElementById('form-edit');
+const editDishIdEl = document.getElementById('edit-dish-id');
+const editDishNameEl = document.getElementById('edit-dish-name');
+const editDishPriceEl = document.getElementById('edit-dish-price');
+const editDishTypeEl = document.getElementById('edit-dish-type');
+const editDishDescEl = document.getElementById('edit-dish-desc');
+const btnCancelEdit = document.getElementById('btn-cancel-edit');
+
 function initAdmin() {
   const saved = localStorage.getItem('skyplate_menu_v7');
   if (saved) {
@@ -25,6 +35,9 @@ function initAdmin() {
   if (fileInput) fileInput.addEventListener('change', handleFileUpload);
   if (formManual) formManual.addEventListener('submit', handleManualSubmit);
   if (searchInputEl) searchInputEl.addEventListener('input', renderAdminMenu);
+  
+  if (formEdit) formEdit.addEventListener('submit', handleEditSubmit);
+  if (btnCancelEdit) btnCancelEdit.addEventListener('click', closeEditModal);
 }
 
 function categorizeDish(name) {
@@ -101,6 +114,44 @@ function handleManualSubmit(e) {
   formManual.reset();
 }
 
+function openEditModal(dishId) {
+  const dish = menuData.find(d => d.id == dishId);
+  if (!dish) return;
+  
+  editDishIdEl.value = dish.id;
+  editDishNameEl.value = dish.name;
+  editDishPriceEl.value = dish.price;
+  editDishTypeEl.value = dish.type || 'Plato';
+  editDishDescEl.value = dish.description || '';
+  
+  editModal.classList.remove('hidden');
+}
+
+function closeEditModal() {
+  editModal.classList.add('hidden');
+  formEdit.reset();
+}
+
+function handleEditSubmit(e) {
+  e.preventDefault();
+  const id = editDishIdEl.value;
+  const name = editDishNameEl.value.trim();
+  if (!name || !id) return;
+
+  const dishIndex = menuData.findIndex(d => d.id == id);
+  if (dishIndex > -1) {
+    menuData[dishIndex].name = name;
+    menuData[dishIndex].price = parseFloat(editDishPriceEl.value) || 0;
+    menuData[dishIndex].type = editDishTypeEl.value || 'Plato';
+    menuData[dishIndex].description = editDishDescEl.value || '';
+    menuData[dishIndex].category = categorizeDish(name);
+    
+    saveMenu();
+    renderAdminMenu();
+    closeEditModal();
+  }
+}
+
 function removeDish(id) {
   if(confirm('¿Seguro de que deseas borrar este plato?')) {
     menuData = menuData.filter(d => d.id != id);
@@ -144,11 +195,17 @@ function renderAdminMenu() {
         </h3>
         <p style="color: #9ca3af; font-size: 0.9rem;">$${parseInt(dish.price).toLocaleString('es-CL')}</p>
       </div>
-      <button class="btn-remove-admin" data-id="${dish.id}" style="background: transparent; border: none; color: #ef4444; cursor: pointer;">
-        <i class="ph ph-trash" style="font-size: 1.5rem;"></i>
-      </button>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button class="btn-edit-admin" data-id="${dish.id}" style="background: transparent; border: none; color: #3b82f6; cursor: pointer;">
+          <i class="ph ph-pencil-simple" style="font-size: 1.5rem;"></i>
+        </button>
+        <button class="btn-remove-admin" data-id="${dish.id}" style="background: transparent; border: none; color: #ef4444; cursor: pointer;">
+          <i class="ph ph-trash" style="font-size: 1.5rem;"></i>
+        </button>
+      </div>
     `;
     
+    div.querySelector('.btn-edit-admin').addEventListener('click', () => openEditModal(dish.id));
     div.querySelector('.btn-remove-admin').addEventListener('click', () => removeDish(dish.id));
     menuListContainer.appendChild(div);
   });

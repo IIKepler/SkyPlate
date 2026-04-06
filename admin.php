@@ -85,6 +85,30 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     </div>
   </div>
 
+  <!-- Modal de Edición -->
+  <div id="edit-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: flex; justify-content: center; align-items: center;">
+    <div style="background: #1f2937; padding: 2rem; border-radius: 1rem; width: 90%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1);">
+      <h2 style="margin-bottom: 1rem;">Editar Plato</h2>
+      <form id="form-edit" style="display: flex; flex-direction: column;">
+        <input type="hidden" id="edit-dish-id">
+        <input type="text" id="edit-dish-name" placeholder="Nombre del plato" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: #374151; color: white; border: 1px solid #4b5563; margin-bottom: 1rem;">
+        <input type="number" id="edit-dish-price" placeholder="Precio ($)" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: #374151; color: white; border: 1px solid #4b5563; margin-bottom: 1rem;">
+        
+        <select id="edit-dish-type" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: #374151; color: white; border: 1px solid #4b5563; margin-bottom: 1rem;">
+          <option value="Plato">Plato</option>
+          <option value="Bebida">Bebida</option>
+        </select>
+        
+        <input type="text" id="edit-dish-desc" placeholder="Descripción breve (opcional)" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: #374151; color: white; border: 1px solid #4b5563; margin-bottom: 1rem;">
+
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">Guardar</button>
+          <button type="button" class="btn" id="btn-cancel-edit" style="flex: 1; background: #4b5563; color: white;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="js/admin.js"></script>
 </body>
 </html>
