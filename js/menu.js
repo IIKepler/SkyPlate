@@ -34,6 +34,9 @@ const INITIAL_MENU = [
 
 let menuData = [];
 let currentCategory = 'Frío';
+let currentFoodPage = 1;
+let currentDrinkPage = 1;
+const ITEMS_PER_PAGE = 4;
 let cart = [];
 let WHATSAPP_NUMBER = window.APP_CONFIG ? window.APP_CONFIG.whatsapp : '+569757152957'; 
 
@@ -51,6 +54,8 @@ const btnCheckout = document.getElementById('btn-checkout');
 
 const foodContainer = document.getElementById('food-container');
 const drinkContainer = document.getElementById('drink-container');
+const foodPagination = document.getElementById('food-pagination');
+const drinkPagination = document.getElementById('drink-pagination');
 const foodTitleIcon = document.getElementById('food-title-icon');
 const drinkTitleIcon = document.getElementById('drink-title-icon');
 const emptyFoodMsg = document.getElementById('empty-food-msg');
@@ -100,6 +105,8 @@ function fetchWeather(lat, lon) {
 
 function setCategory(cat) {
   currentCategory = cat;
+  currentFoodPage = 1;
+  currentDrinkPage = 1;
   bodyEl.className = cat === 'Frío' ? 'theme-cold' : 'theme-hot';
   
   if (cat === 'Frío') {
@@ -124,17 +131,27 @@ function renderMenu() {
   const foodItems = menuData.filter(d => d.category === currentCategory && (d.type === 'Plato' || !d.type));
   const drinkItems = menuData.filter(d => d.category === currentCategory && d.type === 'Bebida');
 
-  renderGrid(foodContainer, emptyFoodMsg, foodItems);
-  renderGrid(drinkContainer, emptyDrinkMsg, drinkItems);
+  renderGrid(foodContainer, emptyFoodMsg, foodItems, currentFoodPage, 'food');
+  renderGrid(drinkContainer, emptyDrinkMsg, drinkItems, currentDrinkPage, 'drink');
 }
 
-function renderGrid(container, emptyMsgEl, items) {
+function renderGrid(container, emptyMsgEl, items, currentPage, type) {
   container.innerHTML = '';
+  const paginationContainer = type === 'food' ? foodPagination : drinkPagination;
+  paginationContainer.innerHTML = '';
+
   if (items.length === 0) {
     emptyMsgEl.classList.remove('hidden');
   } else {
     emptyMsgEl.classList.add('hidden');
-    items.forEach(item => {
+    
+    // Pagination logic
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    if(currentPage > totalPages) currentPage = totalPages;
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    
+    paginatedItems.forEach(item => {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
@@ -152,7 +169,42 @@ function renderGrid(container, emptyMsgEl, items) {
       btnAdd.addEventListener('click', (e) => addToCart(item, e.target));
       container.appendChild(card);
     });
+
+    if (totalPages > 1) {
+      // Prev Btn
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'pagination-btn' + (currentPage === 1 ? ' disabled' : '');
+      prevBtn.innerHTML = '&larr; Anterior';
+      if (currentPage > 1) prevBtn.onclick = () => goToPage(type, currentPage - 1);
+      paginationContainer.appendChild(prevBtn);
+      
+      // Number Btns
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = 'pagination-btn' + (i === currentPage ? ' active' : '');
+        pageBtn.innerText = i;
+        if (i !== currentPage) pageBtn.onclick = () => goToPage(type, i);
+        paginationContainer.appendChild(pageBtn);
+      }
+      
+      // Next Btn
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'pagination-btn' + (currentPage === totalPages ? ' disabled' : '');
+      nextBtn.innerHTML = 'Siguiente &rarr;';
+      if (currentPage < totalPages) nextBtn.onclick = () => goToPage(type, currentPage + 1);
+      paginationContainer.appendChild(nextBtn);
+    }
   }
+}
+
+function goToPage(type, page) {
+  if (type === 'food') {
+    currentFoodPage = page;
+  } else {
+    currentDrinkPage = page;
+  }
+  renderMenu();
+  window.scrollToSec(type === 'food' ? 'seccion-platos' : 'seccion-bebidas');
 }
 
 function addToCart(dish, btnElement) {

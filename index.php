@@ -76,6 +76,7 @@ $whatsapp_number = '+569757152957';
         <div id="food-container" class="grid-container">
           <!-- Platos cargados con JS aquí -->
         </div>
+        <div id="food-pagination" class="pagination-container"></div>
       </section>
 
       <!-- Sección Bebidas -->
@@ -87,6 +88,7 @@ $whatsapp_number = '+569757152957';
         <div id="drink-container" class="grid-container">
           <!-- Bebidas cargadas con JS aquí -->
         </div>
+        <div id="drink-pagination" class="pagination-container"></div>
       </section>
     </main>
 
